@@ -110,6 +110,29 @@ export interface DemoInspectionAssignment {
   completed_date?: string;
 }
 
+export interface CaseAttachment {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  dataUrl?: string;
+  uploaded_at: string;
+  caption?: string;
+}
+
+export interface ReporterContact {
+  consent_to_contact: boolean;
+  full_name?: string;
+  phone_country_code?: string;
+  phone_number?: string;
+  whatsapp_available?: boolean;
+  email?: string;
+  community_role?: string;
+  village_or_ward?: string;
+  preferred_contact_method?: 'whatsapp' | 'sms' | 'call' | 'none';
+  confidentiality_notice_acknowledged?: boolean;
+}
+
 export interface Case {
   id: string;
   reference_number: string;
@@ -144,6 +167,8 @@ export interface Case {
   demo_inspection?: DemoInspectionAssignment | null;
   evidence_items?: string[];
   evidence_completeness?: 'Strong documentation' | 'Some supporting evidence' | 'Additional evidence may help' | 'No evidence uploaded yet';
+  attachments?: CaseAttachment[];
+  reporter_contact?: ReporterContact | null;
   authority_resolution_claim?: {
     claimed_at: string;
     authority_name: string;

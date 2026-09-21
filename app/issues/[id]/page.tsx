@@ -25,7 +25,14 @@ import {
   Eye, 
   ExternalLink,
   ShieldAlert,
-  Check
+  Check,
+  Paperclip,
+  Music,
+  FileText,
+  UserCheck,
+  UserX,
+  MessageSquare,
+  Download
 } from 'lucide-react';
 import Link from 'next/link';
 import GuidanceCard from '@/components/GuidanceCard';
@@ -47,6 +54,7 @@ export default function IssueDetail() {
   const [verifySubmitted, setVerifySubmitted] = useState(false);
   const [showInspectorGpsModal, setShowInspectorGpsModal] = useState(false);
   const [gpsAccessPurpose, setGpsAccessPurpose] = useState('Field water sampling and aquifer boundary inspection');
+  const [selectedPreviewImage, setSelectedPreviewImage] = useState<string | null>(null);
 
   const issue = cases.find(c => c.reference_number === id || c.id === id);
 
@@ -397,13 +405,13 @@ export default function IssueDetail() {
               </section>
             )}
 
-            {/* Smart Evidence Assistant Checklist Display (Requirement #2) */}
-            <section className="bg-slate-50/60 p-6 rounded-3xl border border-slate-200/80 space-y-4">
+            {/* Smart Evidence Assistant Checklist & Actual Uploaded Attachments */}
+            <section className="bg-slate-50/60 p-6 rounded-3xl border border-slate-200/80 space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <FileCheck2 className="w-4 h-4 text-emerald-700" />
                   <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                    Evidence Checklist & Completeness
+                    Evidence Checklist & Documentation
                   </h3>
                 </div>
                 <span className={`text-xs font-bold px-3 py-0.5 rounded-full border ${
@@ -415,20 +423,106 @@ export default function IssueDetail() {
                 </span>
               </div>
 
-              {issue.evidence_items && issue.evidence_items.length > 0 ? (
+              {/* Checklist items */}
+              {issue.evidence_items && issue.evidence_items.length > 0 && (
                 <div className="space-y-2">
-                  {issue.evidence_items.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-800 bg-white p-2.5 rounded-xl border border-slate-200/80">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>{item}</span>
-                    </div>
-                  ))}
+                  <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+                    Verified Checklist Items ({issue.evidence_items.length}):
+                  </span>
+                  <div className="grid sm:grid-cols-2 gap-2">
+                    {issue.evidence_items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-800 bg-white p-2.5 rounded-xl border border-slate-200/80">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span className="truncate">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-xs text-slate-500 italic bg-white p-3 rounded-xl border border-slate-200">
-                  No additional documentary files uploaded yet.
-                </p>
               )}
+
+              {/* Real Attached Files Gallery (Requirement) */}
+              <div className="pt-2 border-t border-slate-200/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                    Attached Media & Files ({issue.attachments?.length || 0})
+                  </span>
+                  {issue.attachments && issue.attachments.length > 0 && (
+                    <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      Encrypted & Intact
+                    </span>
+                  )}
+                </div>
+
+                {issue.attachments && issue.attachments.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {issue.attachments.map((file) => (
+                      <div
+                        key={file.id}
+                        className="p-3 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-2"
+                      >
+                        <div className="flex items-start gap-2.5">
+                          {file.type.startsWith('image/') && file.dataUrl ? (
+                            <img
+                              src={file.dataUrl}
+                              alt={file.name}
+                              onClick={() => setSelectedPreviewImage(file.dataUrl || null)}
+                              className="w-14 h-14 rounded-xl object-cover border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity shrink-0"
+                            />
+                          ) : file.type.startsWith('audio/') ? (
+                            <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 shrink-0 border border-purple-100">
+                              <Music className="w-7 h-7" />
+                            </div>
+                          ) : (
+                            <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0 border border-slate-200">
+                              <FileText className="w-7 h-7" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="font-semibold text-xs text-slate-900 truncate" title={file.name}>
+                              {file.name}
+                            </p>
+                            <p className="text-[10px] text-slate-400 mt-0.5">
+                              {(file.size / 1024).toFixed(0)} KB • {new Date(file.uploaded_at).toLocaleDateString()}
+                            </p>
+                            {file.caption && (
+                              <p className="text-xs text-slate-600 italic mt-1 bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                                &ldquo;{file.caption}&rdquo;
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Embedded audio player if audio attachment */}
+                        {file.type.startsWith('audio/') && file.dataUrl && (
+                          <div className="pt-1">
+                            <audio controls className="w-full h-8" src={file.dataUrl}>
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                        )}
+
+                        {/* View or inspect button */}
+                        {file.dataUrl && (
+                          <div className="pt-1 flex items-center justify-end">
+                            <a
+                              href={file.dataUrl}
+                              download={file.name}
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800"
+                            >
+                              <Download className="w-3 h-3" /> View / Download
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-500 italic bg-white p-3 rounded-xl border border-slate-200">
+                    No physical photos, lab tests, or audio files uploaded with this case.
+                  </p>
+                )}
+              </div>
 
               <p className="text-[11px] text-slate-500 leading-relaxed">
                 <span className="font-semibold text-slate-700">Evidentiary Standard:</span> Lack of documentary evidence does not mean the grievance is false or invalidate community testimony.
@@ -679,6 +773,66 @@ export default function IssueDetail() {
               </div>
             </section>
 
+            {/* Reporter Whistleblower Status & Escrow Details */}
+            <section className="p-5 bg-white rounded-3xl border border-slate-200 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Reporter Status</h3>
+                {issue.reporter_contact?.consent_to_contact ? (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    Protected Escrow
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                    100% Anonymous
+                  </span>
+                )}
+              </div>
+
+              {issue.reporter_contact?.consent_to_contact ? (
+                <div className="p-3.5 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl text-xs space-y-2">
+                  <div className="flex items-center gap-2 text-emerald-950 font-bold">
+                    <UserCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>
+                      {issue.reporter_contact.full_name || 'Community Informant'}
+                    </span>
+                  </div>
+                  {issue.reporter_contact.community_role && (
+                    <p className="text-slate-600 text-[11px]">
+                      Role: <strong>{issue.reporter_contact.community_role}</strong>
+                    </p>
+                  )}
+                  {issue.reporter_contact.village_or_ward && (
+                    <p className="text-slate-600 text-[11px]">
+                      Locality: <strong>{issue.reporter_contact.village_or_ward}</strong>
+                    </p>
+                  )}
+                  <div className="pt-1 border-t border-emerald-100 flex items-center justify-between text-[11px] text-emerald-900">
+                    <span className="flex items-center gap-1">
+                      <MessageSquare className="w-3 h-3 text-emerald-600" />
+                      {(issue.reporter_contact.preferred_contact_method || 'whatsapp').toUpperCase()} Updates
+                    </span>
+                    <span className="font-mono text-[10px] text-slate-500">
+                      {issue.reporter_contact.phone_country_code || '+263'} •••••••
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-emerald-800 flex items-center gap-1 font-medium bg-emerald-100/60 p-2 rounded-xl">
+                    <Lock className="w-3 h-3 text-emerald-700 shrink-0" />
+                    Whistleblower escrow: Contact held confidentially from mining concessionaire.
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs space-y-1.5 text-slate-600">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                    <UserX className="w-4 h-4 text-slate-500" />
+                    <span>Zero Contact Stored</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed">
+                    This report was filed without personally identifiable contact information. Informant tracks case progression using reference ID <strong>{issue.reference_number}</strong>.
+                  </p>
+                </div>
+              )}
+            </section>
+
             {/* Related Project */}
             {issue.project_id && (
               <section className="p-5 bg-white rounded-3xl border border-slate-200 space-y-3">
@@ -695,6 +849,36 @@ export default function IssueDetail() {
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal for Attached Photos */}
+      {selectedPreviewImage && (
+        <div 
+          onClick={() => setSelectedPreviewImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm cursor-pointer"
+        >
+          <div className="relative max-w-2xl max-h-[85vh] bg-white rounded-3xl overflow-hidden p-2 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center px-4 py-2 border-b border-slate-100">
+              <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                Evidence Attachment Preview
+              </span>
+              <button
+                onClick={() => setSelectedPreviewImage(null)}
+                className="text-slate-400 hover:text-slate-700 text-sm font-bold p-1"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-2 flex items-center justify-center max-h-[70vh] overflow-hidden">
+              <img
+                src={selectedPreviewImage}
+                alt="Evidence Photo"
+                className="max-h-[65vh] w-auto rounded-xl object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Demo Modal for Inspector Exact GPS Access */}
       {showInspectorGpsModal && (
