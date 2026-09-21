@@ -17,9 +17,8 @@ Built for the **Open Society Foundations × Andela “Information You Can Trust�
 
 ## Quick Links
 
-- 🌐 **Live Demo:** [https://ais-pre-g2m24ypnn5w7vtf7wx6bax-367185284161.europe-west2.run.app](https://ais-pre-g2m24ypnn5w7vtf7wx6bax-367185284161.europe-west2.run.app)
 - 🎥 **Demo Video:** `[Add 3-minute video link]`
-- 📑 **Pitch Deck:** `[Add pitch deck link]`
+- 📑 **Pitch Deck:** [Pitch deck](https://canva.link/07j86ojqz91g89w)
 - 🧪 **Demo Guide:** [Jump to Running the Hackathon Demo](#running-the-hackathon-demo)
 - 🛠 **Run Locally:** [Jump to Getting Started](#getting-started)
 
