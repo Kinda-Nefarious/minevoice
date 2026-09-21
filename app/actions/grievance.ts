@@ -104,7 +104,7 @@ CRITICAL LEGAL & ACCOUNTABILITY STANDARDS:
 export async function processGrievanceText(text: string) {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
       contents: `Analyze the following community grievance report: "${text}"`,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
@@ -124,15 +124,16 @@ export async function processGrievanceText(text: string) {
 
 export async function processGrievanceAudio(base64Audio: string, mimeType: string) {
   try {
+    const sanitizedBase64 = base64Audio.includes(",") ? base64Audio.split(",")[1] : base64Audio;
     const audioPart = {
       inlineData: {
         mimeType: mimeType || "audio/webm",
-        data: base64Audio,
+        data: sanitizedBase64,
       },
     };
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
       contents: { parts: [audioPart, { text: "Transcribe and analyze this community grievance." }] },
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,

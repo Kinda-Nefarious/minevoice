@@ -91,7 +91,7 @@ Validated feedback improves future routing (Operational learning metrics)
 | Capability | What It Does in the Repository |
 | ---------- | ----------------------------- |
 | **Multilingual Grievance Intake** | Supports audio recording and text intake in **English**, **Shona** (*ChiShona*), **Ndebele** (*isiNdebele*), and **Swahili** (*Kiswahili*). Preserves the original community voice while producing structured English summaries for formal routing. |
-| **Voice & Text Processing** | Ingests spoken audio via browser `MediaRecorder` or text input. Transcribes and analyzes accounts using Google GenAI (`gemini-2.5-flash`), with deterministic rule-based fallbacks if offline or unconfigured. |
+| **Voice & Text Processing** | Ingests spoken audio via browser `MediaRecorder` or text input. Transcribes and analyzes accounts using Google GenAI (`gemini-3.6-flash`), with deterministic rule-based fallbacks if offline or unconfigured. |
 | **Adaptive AI Questioning** | Dynamically identifies missing context (dates first noticed, ongoing vs. past events, immediate life-safety dangers, prior institutional reports) without overwhelming the reporter. |
 | **Smart Evidence Assistant** | Provides category-tailored evidence checklists (photographs with scale, water appearance notes, witness corroboration) and an evidence completeness gauge without invalidating oral testimony. |
 | **AI-Assisted Classification** | Categorizes issues into seven defined mining governance domains (*Water & Pollution*, *Air, Dust, Noise & Blasting*, *Land & Access*, *Compensation & Relocation*, *Safety & Harm*, *Community Commitments*, *Other / Unsure*). |
@@ -408,7 +408,7 @@ MineVoice is architected to separate the **reusable core engine** from **country
 | **Styling** | Tailwind CSS v4.1.11 | `@tailwindcss/postcss`, `tw-animate-css`, custom utility system |
 | **Animations** | Motion 12.23.24 | Smooth step transitions and interactive drawer reveals |
 | **Icons** | Lucide React 0.553.0 | Consistent, lightweight vector iconography |
-| **AI SDK** | `@google/genai` 2.4.0 | Server-side Gemini 2.5 Flash calls via `app/actions/grievance.ts` |
+| **AI SDK** | `@google/genai` 2.4.0 | Server-side Gemini 3.6 Flash calls via `app/actions/grievance.ts` |
 | **State Management** | Zustand 5.0.15 | Persist middleware syncing to `localStorage` |
 | **Validation** | Zod 4.6.5 & Hook Form | Input schema validation |
 | **Date Utilities** | Date-fns 4.4.0 | Timestamp formatting and elapsed response calculations |
@@ -461,7 +461,7 @@ MineVoice is architected to separate the **reusable core engine** from **country
 
 | Variable | Required | Purpose |
 | -------- | -------- | ------- |
-| `GEMINI_API_KEY` | Optional | Used server-side in `app/actions/grievance.ts` to call Gemini 2.5 Flash for audio transcription, language detection, structured fact extraction, and obligation matching. *If omitted, the app automatically activates deterministic rule-based fallbacks.* |
+| `GEMINI_API_KEY` | Optional | Used server-side in `app/actions/grievance.ts` to call Gemini 3.6 Flash for audio transcription, language detection, structured fact extraction, and obligation matching. *If omitted, the app automatically activates deterministic rule-based fallbacks.* |
 | `APP_URL` | Optional | Canonical URL for the applet (used for self-referential links, notifications, and metadata). Defaults to local host during development. |
 
 ---
