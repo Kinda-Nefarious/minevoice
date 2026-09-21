@@ -688,7 +688,7 @@ Grateful acknowledgement is extended to:
 
 ## License
 
-License to be specified.
+Distributed under the [MIT License](LICENSE). See `LICENSE` for more information.
 
 ---
 
