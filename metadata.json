@@ -1,0 +1,6 @@
+{
+  "name": "MineVoice",
+  "description": "Speak up. Route it right. Track what happens. A multilingual public accountability and grievance intelligence platform for mining-affected communities.",
+  "requestFramePermissions": ["microphone", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
