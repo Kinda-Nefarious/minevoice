@@ -189,6 +189,46 @@ export default function ReportPage() {
   };
 
   const getFollowUpQuestions = (category: string) => {
+    if (currentLang === 'sw') {
+      switch (category) {
+        case 'Water & Pollution':
+          return [
+            { id: 'water_source', label: 'Ni chanzo gani cha maji kimeathiriwa? (Kisima, mto, chemchemi)' },
+            { id: 'when_started', label: 'Uchafuzi au mabadiliko haya yalianza lini?' }
+          ];
+        case 'Air, Dust, Noise & Blasting':
+          return [
+            { id: 'frequency', label: 'Hali hii ya milipuko au vumbi hutokea mara ngapi kwa wiki?' },
+            { id: 'damage', label: 'Je, kuna nyufa zimejitokeza kwenye nyumba au majengo ya jamii?' }
+          ];
+        default:
+          return [
+            { id: 'reported_before', label: 'Je, umewahi kuripoti suala hili kwa mamlaka yoyote hapo awali? Kwa nani?' },
+            { id: 'outcome_sought', label: 'Ni suluhu au hatua gani unayotaka ichukuliwe?' }
+          ];
+      }
+    }
+
+    if (currentLang === 'nd') {
+      switch (category) {
+        case 'Water & Pollution':
+          return [
+            { id: 'water_source', label: 'Yiphi indawo yamanzi ethintekileyo? (Ibhobholo, umfula, kumbe umthombo)' },
+            { id: 'when_started', label: 'Lokhu kungcola kwaqala nini?' }
+          ];
+        case 'Air, Dust, Noise & Blasting':
+          return [
+            { id: 'frequency', label: 'Lokhu kwenzakala kangaki ngeviki?' },
+            { id: 'damage', label: 'Kukhona imifantu ebonakele ezindlini na?' }
+          ];
+        default:
+          return [
+            { id: 'reported_before', label: 'Wake wakubika lokhu kwabanye na? Kubani?' },
+            { id: 'outcome_sought', label: 'Yisiphi isixazululo osifisayo?' }
+          ];
+      }
+    }
+
     if (currentLang === 'sn') {
       switch (category) {
         case 'Water & Pollution':

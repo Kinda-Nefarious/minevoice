@@ -194,17 +194,21 @@ function enhanceWithRegistry(data: any, originalInput: string) {
 
 function getFallbackGrievance(text: string) {
   const lower = text.toLowerCase();
-  const isWater = lower.includes('water') || lower.includes('mvura') || lower.includes('borehole') || lower.includes('rwizi') || lower.includes('stream') || lower.includes('tailings') || lower.includes('chitubu');
-  const isBlast = lower.includes('blast') || lower.includes('kuputika') || lower.includes('cracks') || lower.includes('dzimba') || lower.includes('guruva') || lower.includes('dust') || lower.includes('shaking') || lower.includes('marori');
+  const isWater = lower.includes('water') || lower.includes('mvura') || lower.includes('amanzi') || lower.includes('maji') || lower.includes('borehole') || lower.includes('rwizi') || lower.includes('stream') || lower.includes('tailings') || lower.includes('chitubu');
+  const isBlast = lower.includes('blast') || lower.includes('kuputika') || lower.includes('mlipuko') || lower.includes('cracks') || lower.includes('dzimba') || lower.includes('guruva') || lower.includes('vumbi') || lower.includes('dust') || lower.includes('shaking') || lower.includes('marori');
+  const isSwahili = lower.includes('maji') || lower.includes('vumbi') || lower.includes('mlipuko') || lower.includes('mgodi') || lower.includes('lalamiko') || lower.includes('jamii') || lower.includes('madhara') || lower.includes('kero');
+  const isNdebele = lower.includes('amanzi') || lower.includes('umphakathi') || lower.includes('ibhobholo') || lower.includes('isikhalazo') || lower.includes('izindlu');
   const isShona = lower.includes('ndiri') || lower.includes('mvura') || lower.includes('zvikuru') || lower.includes('zvaitika') || lower.includes('rwizi') || lower.includes('musha') || lower.includes('marori');
+
+  const detectedLang = isSwahili ? 'sw' : isNdebele ? 'nd' : isShona ? 'sn' : 'en';
 
   if (isWater) {
     const regSource = REGULATORY_SOURCE_REGISTRY[0]; // EMA Act S57
     const esiaSource = REGULATORY_SOURCE_REGISTRY[4]; // Condition 6.1
 
     return {
-      detected_language: isShona ? 'sn' : 'en',
-      original_summary: isShona ? text : 'Borehole water discoloration and chemical froth detected near tailings facility.',
+      detected_language: detectedLang,
+      original_summary: detectedLang !== 'en' ? text : 'Borehole water discoloration and chemical froth detected near tailings facility.',
       english_summary: 'Community reported dark water discoloration, metallic taste, and possible effluent runoff in communal borehole water.',
       category: 'Water & Pollution',
       subcategory: 'Tailings runoff into community water supply',
@@ -271,8 +275,8 @@ function getFallbackGrievance(text: string) {
   const dustSource = REGULATORY_SOURCE_REGISTRY[3]; // Condition 4.2
 
   return {
-    detected_language: isShona ? 'sn' : 'en',
-    original_summary: isShona ? text : 'Heavy blasting vibrations caused wall cracks in surrounding homesteads without advance siren.',
+    detected_language: detectedLang,
+    original_summary: detectedLang !== 'en' ? text : 'Heavy blasting vibrations caused wall cracks in surrounding homesteads without advance siren.',
     english_summary: 'Community reported structural cracking in homestead walls and intense dust following open-pit blasting without warning siren.',
     category: 'Air, Dust, Noise & Blasting',
     subcategory: 'Open-cast blasting shockwave and structural damage',

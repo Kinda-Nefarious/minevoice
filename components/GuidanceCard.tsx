@@ -211,6 +211,18 @@ export default function GuidanceCard({
             >
               Ndebele
             </button>
+            <button
+              id="guidance-lang-sw"
+              type="button"
+              onClick={() => { setCardLang('sw'); setShowOriginal(false); }}
+              className={`px-2.5 py-1 rounded-md font-medium transition-colors ${
+                cardLang === 'sw' && !showOriginal
+                  ? 'bg-slate-900 text-white shadow-2xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Kiswahili
+            </button>
           </div>
 
           {(cardLang !== 'en' || showOriginal) && (

@@ -107,7 +107,7 @@ interface LanguageStrings {
   last_updated_label: string;
 }
 
-const I18N_STRINGS: Record<'en' | 'sn' | 'nd', LanguageStrings> = {
+const I18N_STRINGS: Record<'en' | 'sn' | 'nd' | 'sw', LanguageStrings> = {
   en: {
     questions: {
       where_now: 'Where is my grievance now?',
@@ -206,6 +206,39 @@ const I18N_STRINGS: Record<'en' | 'sn' | 'nd', LanguageStrings> = {
       disputed: 'Kuphikiswe ngumphakathi'
     },
     last_updated_label: 'Ilanga lokucina lokulungiswa'
+  },
+  sw: {
+    questions: {
+      where_now: 'Lalamiko langu limefikia wapi sasa?',
+      what_next: 'Nini kinachotarajiwa kufuata?',
+      action_needed: 'Je, ninahitajika kufanya chochote?',
+      when_update: 'Lini nitapokea taarifa inayofuata?',
+      what_if_stalled: 'Nifanye nini kukiwa hakuna kinachoendelea?'
+    },
+    action_levels: {
+      none: {
+        label: 'Hakuna hatua inayohitajika',
+        desc: 'Huna haja ya kufanya chochote kwa sasa. Kesi inashughulikiwa na mamlaka.'
+      },
+      recommended: {
+        label: 'Hatua inapendekezwa',
+        desc: 'Unaweza kuongeza ushahidi au kufuatilia maendeleo ya utatuzi eneo la tukio.'
+      },
+      required: {
+        label: 'Hatua inahitajika',
+        desc: 'Ushirikiano wako au uthibitisho wa jamii unahitajika ili kuendeleza mchakato huu.'
+      }
+    },
+    tiny_prefix: {
+      next: 'Inayofuata',
+      waiting_ack: 'Inasubiri kupokewa',
+      review: 'Inakaguliwa',
+      inspection: 'Ukaguzi umepangwa',
+      verification: 'Uthibitisho wa jamii',
+      resolved: 'Imethibitishwa kutatuliwa',
+      disputed: 'Inapingwa na jamii'
+    },
+    last_updated_label: 'Tarehe ya sasisho la mwisho'
   }
 };
 
@@ -219,7 +252,7 @@ export function resolveNextStepGuidance(
   issue: Case,
   lang: SupportedLanguage = 'en'
 ): NextStepGuidance {
-  const activeLang: 'en' | 'sn' | 'nd' = (lang === 'sn' || lang === 'nd') ? lang : 'en';
+  const activeLang: 'en' | 'sn' | 'nd' | 'sw' = (lang === 'sn' || lang === 'nd' || lang === 'sw') ? lang : 'en';
   const strings = I18N_STRINGS[activeLang];
 
   const primaryAuthority = issue.routes?.[0]?.authority_id?.toUpperCase() || 'EMA';
@@ -273,11 +306,15 @@ export function resolveNextStepGuidance(
         ? 'Gunun’una renyu harisati ratumirwa.'
         : activeLang === 'nd'
         ? 'Isikhalazo sakho asikathunyelwa.'
+        : activeLang === 'sw'
+        ? 'Lalamiko lako bado halijawasilishwa rasmi.'
         : 'Your grievance has not been submitted yet.';
       primaryMessage = activeLang === 'sn'
         ? 'Ongororai mashoko enyu uye humbowo hwenyu musati matumira kune vane masimba.'
         : activeLang === 'nd'
         ? 'Hlolisisa imininingwane yakho lobufakazi ungakathumeli.'
+        : activeLang === 'sw'
+        ? 'Kagua maelezo yako na ushahidi unaounga mkono kabla ya kuwasilisha kwa mamlaka husika.'
         : 'Review your details and supporting evidence before submitting to the authorities.';
       reporterActionLevel = 'required';
       expectedNextStep = 'Complete and confirm submission.';
@@ -292,11 +329,15 @@ export function resolveNextStepGuidance(
         ? 'Mamwe mashoko anodiwa kuti nyaya iyi ienderere mberi.'
         : activeLang === 'nd'
         ? 'Kudingeka imininingwane eyengeziweyo ukuze indaba iqhubekele phambili.'
+        : activeLang === 'sw'
+        ? 'Maelezo zaidi yanahitajika kabla ya lalamiko hili kuendelea mbele.'
         : 'More information is needed before this grievance can move forward.';
       primaryMessage = activeLang === 'sn'
         ? 'Ndokumbira mupe nzvimbo inofungidzirwa uye musi wakatanga dambudziko iri.'
         : activeLang === 'nd'
         ? 'Sicela unikeze indawo ecatshangelwayo kanye lesikhathi okwaqala ngaso.'
+        : activeLang === 'sw'
+        ? 'Tafadhali toa makadirio ya eneo au eleza lini uchafuzi au athari zilipoanza.'
         : 'Please provide approximate location details or describe when the contamination or impact began.';
       reporterActionLevel = 'required';
       expectedNextStep = 'Add missing details to complete the intake file.';
@@ -311,11 +352,15 @@ export function resolveNextStepGuidance(
         ? 'Gunun’una renyu rine mashoko ose anodiwa.'
         : activeLang === 'nd'
         ? 'Isikhalazo sakho silemininingwane yonke edingekayo.'
+        : activeLang === 'sw'
+        ? 'Lalamiko lako lina taarifa zote kuu zinazohitajika kwa ukaguzi.'
         : 'Your grievance contains the main information needed for review.';
       primaryMessage = activeLang === 'sn'
         ? 'Tarisisai kana MineVoice yanzwisisa chirevo chenyu musati matumira.'
         : activeLang === 'nd'
         ? 'Hlola ukuthi iMineVoice iqonde kahle isikhalazo sakho ungakasithumeli.'
+        : activeLang === 'sw'
+        ? 'Hakikisha kwamba MineVoice imeelewa ripoti yako kwa usahihi kabla ya kuiwasilisha.'
         : 'Check that MineVoice understood your report correctly before submitting.';
       reporterActionLevel = 'recommended';
       expectedNextStep = 'Verification of summary and confirmation of routing.';
@@ -330,6 +375,8 @@ export function resolveNextStepGuidance(
         ? `Gunun’una renyu rakagadzirira kutumirwa ku${primaryAuthority}.`
         : activeLang === 'nd'
         ? `Isikhalazo sakho silungele ukuthunyelwa ku-${primaryAuthority}.`
+        : activeLang === 'sw'
+        ? `Lalamiko lako liko tayari kutumwa kwa ${primaryAuthority}.`
         : `Your grievance is ready to be sent to ${primaryAuthority}.`;
       primaryMessage = `Intake dossier is prepared for ${authorityFullName}. Facts and approximate location will be shared.`;
       reporterActionLevel = 'required';
@@ -361,12 +408,16 @@ export function resolveNextStepGuidance(
         ? `Gunun’una renyu rakatumirwa ku${primaryAuthority}.`
         : activeLang === 'nd'
         ? `Isikhalazo sakho sesithunyelwe ku-${primaryAuthority}.`
+        : activeLang === 'sw'
+        ? `Lalamiko lako limewasilishwa kwa ${primaryAuthority}.`
         : `Your grievance has been submitted to ${primaryAuthority}.`;
 
       primaryMessage = activeLang === 'sn'
         ? `MineVoice yakamirira kuti ${primaryAuthority} itambire gunun’una iri pamutemo.`
         : activeLang === 'nd'
         ? `IMineVoice ilindele ukwamukelwa ngokusemthethweni kusuka ku-${primaryAuthority}.`
+        : activeLang === 'sw'
+        ? `MineVoice inasubiri uthibitisho rasmi wa kupokelewa kutoka kwa ${authorityFullName}.`
         : `MineVoice is waiting for formal acknowledgement from ${authorityFullName}.`;
 
       secondaryMessage = isClockOverdue
@@ -395,12 +446,16 @@ export function resolveNextStepGuidance(
         ? `${primaryAuthority} yatambira gunun’una renyu zviri pamutemo.`
         : activeLang === 'nd'
         ? `I-${primaryAuthority} isiyemukele isikhalazo sakho ngokusemthethweni.`
+        : activeLang === 'sw'
+        ? `${authorityFullName} imethibitisha rasmi kupokea lalamiko lako.`
         : `${authorityFullName} has acknowledged your grievance.`;
 
       primaryMessage = activeLang === 'sn'
         ? `Nyaya iyi yakanyoreswa muqueue ye${primaryAuthority}. Hapana chekuita kubva kwamuri pari zvino.`
         : activeLang === 'nd'
         ? `Indaba ibhalisiwe kuluhlu lwe-${primaryAuthority}. Akukho okumele ukwenze khathesi.`
+        : activeLang === 'sw'
+        ? `Kesi hii imesajiliwa kwenye orodha ya ${primaryAuthority}. Huna haja ya kufanya chochote kwa sasa.`
         : `The authority has formally accepted the grievance into their intake queue. No action is required from you right now.`;
 
       secondaryMessage = 'The authority has acknowledged the case. A technical assessment, inspector assignment, or request for additional details is expected next.';
@@ -417,12 +472,16 @@ export function resolveNextStepGuidance(
         ? `${primaryAuthority} iri kukumbira mamwe mashoko pamusoro penyaya iyi.`
         : activeLang === 'nd'
         ? `I-${primaryAuthority} icela imininingwane eyengeziweyo ngaloludaba.`
+        : activeLang === 'sw'
+        ? `${authorityFullName} inaomba maelezo ya ziada kabla ya kuendelea mbele.`
         : `${authorityFullName} needs more information before continuing.`;
 
       primaryMessage = activeLang === 'sn'
         ? `Hofisi ye${primaryAuthority} yakumbira tsananguro yakadzama kana mifananidzo yehumbowo.`
         : activeLang === 'nd'
         ? `Ihhovisi le-${primaryAuthority} licele incazelo egcweleyo kumbe imifanekiso yobufakazi.`
+        : activeLang === 'sw'
+        ? `Ofisi ya ${primaryAuthority} imeomba ufafanuzi wa kina au picha za ushahidi kabla ya kuendelea na uchunguzi.`
         : `The authority has requested additional facts or documentation to substantiate the report before proceeding.`;
 
       secondaryMessage = 'Please provide the requested details so the regulatory inspection or review can proceed.';
@@ -441,12 +500,16 @@ export function resolveNextStepGuidance(
         ? `Gunun’una renyu riri kuongororwa ne${primaryAuthority}.`
         : activeLang === 'nd'
         ? `Isikhalazo sakho sihlolisiswa yi-${primaryAuthority}.`
+        : activeLang === 'sw'
+        ? `Lalamiko lako linakaguliwa rasmi na ${authorityFullName}.`
         : `Your grievance is currently under review by ${authorityFullName}.`;
 
       primaryMessage = activeLang === 'sn'
         ? `Vakuru ve${primaryAuthority} vari kuongorora mashoko akapiwa. Hapana zvinodiwa kubva kwamuri pari zvino.`
         : activeLang === 'nd'
         ? `Iziphathamandla ze-${primaryAuthority} zihlola imininingwane. Akukho okudingekayo kuwe khathesi.`
+        : activeLang === 'sw'
+        ? `Maafisa wa ${primaryAuthority} wanakagua ukweli na vigezo vya kiufundi. Hakuna hatua inayohitajika kutoka kwako katika hatua hii.`
         : `The authority is reviewing the facts and technical merits. No action is required from you at this stage.`;
 
       secondaryMessage = daysSinceUpdate >= 10
@@ -467,6 +530,8 @@ export function resolveNextStepGuidance(
         ? `Mushandi wekuongorora panzvimbo akagadzwa ne${primaryAuthority}.`
         : activeLang === 'nd'
         ? `Umhloli wendawo usesabelwe yi-${primaryAuthority}.`
+        : activeLang === 'sw'
+        ? `Mkaguzi wa eneo la tukio ameteuliwa na ${primaryAuthority}.`
         : `An on-site inspection has been assigned by ${primaryAuthority}.`;
 
       primaryMessage = `Inspector ${inspector} has been designated for field assessment. Proposed date: ${proposedDate}.`;
@@ -484,6 +549,8 @@ export function resolveNextStepGuidance(
         ? 'Kuongorora panzvimbo kwapera; mushumo uri kugadzirwa.'
         : activeLang === 'nd'
         ? 'Ukuhlolwa kwendawo sekuqediwe; umbiko usalungiswa.'
+        : activeLang === 'sw'
+        ? 'Ukaguzi wa eneo umekamilika; taarifa rasmi ya ukaguzi inaandaliwa.'
         : 'Inspection completed; awaiting official inspection report.';
 
       primaryMessage = 'The field officer has completed the site inspection and sample collection. Findings are being compiled.';
@@ -502,6 +569,8 @@ export function resolveNextStepGuidance(
         ? 'Vakuru vakashuma kuti danho rekugadzirisa rakatorwa.'
         : activeLang === 'nd'
         ? 'Iziphathamandla zibike ukuthi kuthathwe isinyathelo sokulungisa.'
+        : activeLang === 'sw'
+        ? 'Mamlaka imeripoti kuwa hatua za utatuzi zimechukuliwa.'
         : 'The authority has reported that corrective action was taken.';
 
       primaryMessage = `The authority states: "${claimText}". Under MineVoice civic accountability protocols, an authority claim is not treated as final resolution until confirmed by affected community members.`;
@@ -521,12 +590,16 @@ export function resolveNextStepGuidance(
         ? 'Vane masimba vanoti dambudziko ragadziriswa. Zvino tinoda maonero enharaunda.'
         : activeLang === 'nd'
         ? 'Iziphathamandla zithi indaba isilungisiwe. Khathesi sidinga uvo lomphakathi.'
+        : activeLang === 'sw'
+        ? 'Mamlaka inasema tatizo hili limetatuliwa. Sasa tunahitaji uthibitisho wa jamii.'
         : 'The authority says this issue was addressed. We now need the community’s view.';
 
       primaryMessage = activeLang === 'sn'
         ? `Chirevo chemubatanidzwa chinoti: "${claimSummary}". Dambudziko iri ragadziriswa zvechokwadi munharaunda menyu here?`
         : activeLang === 'nd'
         ? `Isitatimende sithi: "${claimSummary}". Loludaba selulungiswe sibili emphakathini wenu na?`
+        : activeLang === 'sw'
+        ? `Taarifa ya mamlaka inasema: "${claimSummary}". Je, tatizo hili limetatuliwa kweli katika eneo lako?`
         : `The authority reported: "${claimSummary}". Has this problem actually been resolved on the ground?`;
 
       secondaryMessage = 'Under MineVoice standards, an institutional report alone does not close a case. Confirmation from residents who live near the site is required.';
@@ -544,6 +617,8 @@ export function resolveNextStepGuidance(
         ? 'Gunun’una iri rakasimbiswa kuti rakagadziriswa zvizere.'
         : activeLang === 'nd'
         ? 'Loludaba seluqinisekiswe ukuthi selulungisiwe ngokupheleleyo.'
+        : activeLang === 'sw'
+        ? 'Lalamiko hili limethibitishwa kuwa limetatuliwa kikamilifu.'
         : 'This grievance has been verified as resolved.';
 
       primaryMessage = 'Both the authority’s corrective action and on-the-ground community verification have confirmed that the problem has been addressed.';
@@ -563,6 +638,8 @@ export function resolveNextStepGuidance(
         ? 'Mamwe matanho akatorwa, asi nharaunda inoti dambudziko harisati rapera zvizere.'
         : activeLang === 'nd'
         ? 'Kukhona okwenziweyo, kodwa umphakathi uthi indaba ayikaqediwe ngokugcweleyo.'
+        : activeLang === 'sw'
+        ? 'Baadhi ya hatua zimechukuliwa, lakini jamii inaripoti kuwa tatizo halijakwisha kabisa.'
         : 'Some action was taken, but the community reports the issue is not fully resolved.';
 
       primaryMessage = issue.verification_feedback?.verification_notes ||
@@ -581,6 +658,8 @@ export function resolveNextStepGuidance(
         ? 'Vane masimba vanoti dambudziko rapera, asi nharaunda inopikisa izvi.'
         : activeLang === 'nd'
         ? 'Iziphathamandla zithi indaba iphelile, kodwa umphakathi uyaphikisana lalokhu.'
+        : activeLang === 'sw'
+        ? 'Mamlaka inasema tatizo limetatuliwa, lakini jamii inapinga na kutokubaliana.'
         : 'The authority reports that the issue was resolved, but the community disagrees.';
 
       primaryMessage = 'The authority claimed corrective work was completed, but community residents report that the problem continues. MineVoice has not independently determined which account is correct.';
@@ -595,7 +674,9 @@ export function resolveNextStepGuidance(
 
     case 'Redirected': {
       actionType = 'redirected';
-      headline = `This grievance has been redirected to ${primaryAuthority}.`;
+      headline = activeLang === 'sw'
+        ? `Lalamiko hili limeelekezwa kwa ${primaryAuthority}.`
+        : `This grievance has been redirected to ${primaryAuthority}.`;
       primaryMessage = `The initial reviewer assessed that statutory jurisdiction belongs to ${authorityFullName}.`;
       reporterActionLevel = 'none';
       expectedNextStep = `Intake acknowledgement from ${primaryAuthority}.`;
@@ -605,7 +686,9 @@ export function resolveNextStepGuidance(
 
     case 'Closed without resolution': {
       actionType = 'closed_without_resolution';
-      headline = 'This case has been closed without a verified resolution.';
+      headline = activeLang === 'sw'
+        ? 'Kesi hii imefungwa bila utatuzi uliothibitishwa.'
+        : 'This case has been closed without a verified resolution.';
       primaryMessage = 'The institutional authority closed the record without on-the-ground community confirmation. You can review available formal appeal or escalation pathways.';
       reporterActionLevel = 'recommended';
       expectedNextStep = 'Independent legal clinic consultation or petition to the Provincial Directorate.';
@@ -616,7 +699,9 @@ export function resolveNextStepGuidance(
 
     case 'Withdrawn': {
       actionType = 'withdrawn';
-      headline = 'This grievance was withdrawn by the reporter.';
+      headline = activeLang === 'sw'
+        ? 'Lalamiko hili lilifutwa na mtoa taarifa.'
+        : 'This grievance was withdrawn by the reporter.';
       primaryMessage = 'No further statutory action or community verification is scheduled for this record.';
       reporterActionLevel = 'none';
       expectedNextStep = 'Record archived.';
@@ -654,7 +739,8 @@ export function resolveNextStepGuidance(
   // Format last update date
   const updatedDate = new Date(issue.updated_at || issue.created_at);
   const formattedDate = !isNaN(updatedDate.getTime()) 
-    ? updatedDate.toLocaleDateString(activeLang === 'sn' ? 'sn-ZW' : activeLang === 'nd' ? 'nd-ZW' : 'en-GB', {
+    ? updatedDate.toLocaleDateString(
+        activeLang === 'sn' ? 'sn-ZW' : activeLang === 'nd' ? 'nd-ZW' : activeLang === 'sw' ? 'sw-TZ' : 'en-GB', {
         day: 'numeric',
         month: 'short',
         year: 'numeric'
@@ -663,10 +749,10 @@ export function resolveNextStepGuidance(
 
   const daysAgo = Math.max(0, Math.floor((Date.now() - (isNaN(updatedDate.getTime()) ? Date.now() : updatedDate.getTime())) / (1000 * 60 * 60 * 24)));
   const relativeTime = daysAgo === 0 
-    ? (activeLang === 'sn' ? 'Nhasi' : activeLang === 'nd' ? 'Lamuhla' : 'Today')
+    ? (activeLang === 'sn' ? 'Nhasi' : activeLang === 'nd' ? 'Lamuhla' : activeLang === 'sw' ? 'Leo' : 'Today')
     : daysAgo === 1
-    ? (activeLang === 'sn' ? 'Nezuro' : activeLang === 'nd' ? 'Izolo' : 'Yesterday')
-    : (activeLang === 'sn' ? `Mazuva ${daysAgo} apfuura` : activeLang === 'nd' ? `Ensuku ezingi-${daysAgo} ezedluleyo` : `${daysAgo} days ago`);
+    ? (activeLang === 'sn' ? 'Nezuro' : activeLang === 'nd' ? 'Izolo' : activeLang === 'sw' ? 'Jana' : 'Yesterday')
+    : (activeLang === 'sn' ? `Mazuva ${daysAgo} apfuura` : activeLang === 'nd' ? `Ensuku ezingi-${daysAgo} ezedluleyo` : activeLang === 'sw' ? `Siku ${daysAgo} zilizopita` : `${daysAgo} days ago`);
 
   return {
     action_type: actionType,

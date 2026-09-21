@@ -384,13 +384,14 @@ MineVoice is architected to separate the **reusable core engine** from **country
        ┌───────────────────┴───────────────────┐
        ▼                                       ▼
 ┌─────────────────────────────┐ ┌─────────────────────────────┐
-│    ZIMBABWE JURISDICTION    │ │ FUTURE EXPANSION (e.g. DRC, │
-│         (Configured)        │ │      ZAMBIA, GHANA)         │
+│    ZIMBABWE & REGIONAL      │ │ FUTURE CONTINENTAL EXPANSION│
+│   CORRIDOR JURISDICTION     │ │    (e.g. DRC, ZAMBIA, GHANA)│
 │ • EMA Act [Cap 20:27]       │ │ • DRC Mining Code (2018)    │
 │ • SI 109/1990 (Blasting)    │ │ • Zambia EMA Act (2011)     │
 │ • SI 6/2007 (Effluent)      │ │ • Ghana Minerals Commission │
-│ • English, Shona, Ndebele   │ │ • French, Lingala, Swahili, │
-│ • Goromonzi, Zvishavane Wards││   Bemba, Twi               │
+│ • English, Shona, Ndebele,  │ │ • French, Lingala, Bemba,   │
+│   Swahili (Kiswahili)       │ │   Twi, Portuguese           │
+│ • Goromonzi, Zvishavane     │ │ • Katanga, Copperbelt Wards │
 └─────────────────────────────┘ └─────────────────────────────┘
 ```
 
@@ -550,7 +551,7 @@ minevoice/
 │   ├── escalation-rules.ts       # Verified statutory escalation thresholds (EMA, Mines, RDC)
 │   ├── evidence-assistant.ts     # Category-specific evidence checklist library & completeness scorer
 │   ├── guidance-engine.ts        # Dynamic guidance resolution & multilingual question translations
-│   ├── i18n.ts                   # Trilingual translations (English, Shona, Ndebele, Swahili)
+│   ├── i18n.ts                   # Multilingual translations (English, Shona, Ndebele, Swahili)
 │   ├── regulatory-registry.ts    # Seeded statutory source registry (EMA Act, SIs, ESIA permits)
 │   ├── store.ts                  # Zustand state store with localStorage persistence & seed data
 │   └── utils.ts                  # Classname merging and utility helpers
@@ -595,7 +596,7 @@ In the interest of full technical transparency, this hackathon proof of concept 
 * **Client-Side Persistence:** State is currently persisted in browser `localStorage`. Changes made on one device are not synchronized across other users' devices without a shared cloud database.
 * **Simulated Authority Portal:** The Authority Portal is an operational simulation demonstrating how regulatory workflows function; it is not currently connected to live government email servers or intranet systems.
 * **Jurisdiction Scope:** Only Zimbabwean mining governance frameworks are currently indexed in the regulatory registry.
-* **Translation Boundaries:** While Gemini handles Shona and Ndebele effectively, subtle regional idioms and complex dialect variations still require human review.
+* **Translation Boundaries:** While Gemini handles Shona, Ndebele, and Swahili effectively, subtle regional idioms and complex dialect variations still benefit from human review.
 * **Not Legal Counsel:** MineVoice does not provide legal representation, legal advice, or judicial remedies.
 
 ---
@@ -627,7 +628,7 @@ MineVoice was conceived, architected, and built using Google AI Studio and moder
 * *All product direction, trust standards, civic principles, and statutory research remained human-directed.*
 
 ### 4. Presentation
-Crafted with a clean, high-contrast civic aesthetic: zero "AI slop" clichés, genuine trilingual language toggles, mobile-first touch ergonomics (minimum 44px touch targets), and an accessible, scannable information hierarchy.
+Crafted with a clean, high-contrast civic aesthetic: zero "AI slop" clichés, genuine multilingual language toggles (English, ChiShona, isiNdebele, Kiswahili), mobile-first touch ergonomics (minimum 44px touch targets), and an accessible, scannable information hierarchy.
 
 ---
 
